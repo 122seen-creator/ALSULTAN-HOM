@@ -3,180 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>مهمة عاجلة - وزارة التعليم</title>
+    <title>تحدي المواطنة الرقمية - المهمة الكبرى</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --primary-color: #007078;
-            --accent-color: #d4af37;
-            --bg-color: #f4f7f6;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            touch-action: manipulation;
-        }
-
-        .container {
-            width: 95%;
-            max-width: 500px;
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            text-align: center;
-            border-top: 8px solid var(--primary-color);
-        }
-
-        h2 { color: var(--primary-color); margin-bottom: 20px; font-size: 1.4rem; }
-
-        .timer-box {
-            font-size: 24px;
-            font-weight: bold;
-            color: #e74c3c;
-            margin: 15px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .question-box { margin-bottom: 20px; text-align: right; }
+        :root { --moe-green: #00816a; --alert-red: #e63946; --bg-color: #f4f7f6; }
         
-        /* تحسين اختيار الإجابات للهواتف */
-        label {
-            display: block;
-            background: #f9f9f9;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 8px;
-            border: 1px solid #ddd;
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background-color: var(--bg-color); 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            touch-action: manipulation;
+            overflow-x: hidden;
         }
 
-        input[type="radio"] { margin-left: 10px; transform: scale(1.2); }
-
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        #userName {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
+        .main-card { 
+            width: 92%; 
+            max-width: 500px; 
+            background: white; 
+            border-radius: 20px; 
+            padding: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            border-top: 10px solid var(--moe-green); 
+            text-align: center; 
+            position: relative;
+            margin: 20px auto;
             box-sizing: border-box;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            text-align: center;
+        }
+
+        /* تنسيق العداد مع أيقونة الساعة */
+        .timer-badge { 
+            display: none;
+            background: var(--alert-red); 
+            color: white; 
+            padding: 8px 18px; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .screen { display: none; animation: fadeIn 0.4s; }
+        .screen.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .btn-moe { 
+            background: var(--moe-green); 
+            color: white; 
+            border: none; 
+            padding: 16px; 
+            border-radius: 12px; 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            width: 100%; 
+            margin-top: 20px; 
+            transition: 0.3s; 
+        }
+
+        .option-btn { 
+            background: #f8fafc; 
+            border: 1px solid #e2e8f0; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            text-align: right; 
+            width: 100%; 
+            font-family: 'Cairo'; 
+            font-size: 1rem;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .option-btn:active { background: #f0fdfa; transform: scale(0.98); }
+
+        .progress-bar { height: 8px; background: #eee; border-radius: 4px; margin-top: 25px; overflow: hidden; }
+        .progress-fill { height: 100%; width: 0%; background: var(--moe-green); transition: 0.3s; }
+        
+        input[type="text"] {
+            width: 100%; box-sizing: border-box; padding: 15px; margin-top: 15px; 
+            border-radius: 10px; border: 2px solid #eee; text-align: center; font-size: 1rem; font-family: 'Cairo';
         }
 
         @media (max-width: 480px) {
-            .container { padding: 15px; }
-            h2 { font-size: 1.2rem; }
+            .main-card { padding: 20px; width: 95%; }
+            h2 { font-size: 1.3rem; }
+            .option-btn { padding: 12px; font-size: 0.9rem; }
         }
     </style>
 </head>
 <body>
 
-<div class="container" id="quiz-container">
-    <div id="setup">
-        <h2>مهمة عاجلة جداً</h2>
-        <p>أدخل اسمك للبدء في المهمة:</p>
-        <input type="text" id="userName" placeholder="الاسم الكريم...">
-        <button onclick="startMission()">قبول المهمة</button>
+<div class="main-card">
+    <div class="timer-badge" id="timer-box">
+        <i class="fas fa-clock"></i>
+        <span id="timer">10</span>
     </div>
 
-    <div id="quiz" style="display: none;">
-        <h3 id="welcome-msg"></h3>
-        <div class="timer-box">
-            <i class="fas fa-clock"></i> <span id="timer">10</span> ثوانٍ
-        </div>
-        <hr>
-        <div id="question-container" class="question-box"></div>
-        <button onclick="nextQuestion()">السؤال التالي</button>
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://www.soundjay.com/free-music/iron-man-heart-beat-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="screen active" id="step1">
+        <img src="https://upload.wikimedia.org/wikipedia/ar/1/11/Logo_of_Ministry_of_Education_%28Saudi_Arabia%29.svg" width="140">
+        <h2>نظام الاستجابة الرقمي</h2>
+        <input type="text" id="stdName" placeholder="سجل اسمك هنا للبدء">
+        <button class="btn-moe" id="loginBtn">تفعيل الهوية والدخول</button>
     </div>
 
-    <div id="result-screen" style="display: none;">
-        <h2>النتيجة النهائية</h2>
-        <p id="final-score"></p>
-        <button onclick="location.reload()">إعادة المحاولة</button>
+    <div class="screen" id="step2">
+        <h2 style="color:var(--alert-red)">⚠️ نداء عاجل</h2>
+        <p id="msg"></p>
+        <p>البطولة تكمن في سرعة قراراتك.. هل أنت مستعد؟</p>
+        <button class="btn-moe" id="startBtn">قبول المهمة (ابدأ)</button>
+    </div>
+
+    <div class="screen" id="step3">
+        <h3 id="qText" style="min-height: 60px;"></h3>
+        <div id="options"></div>
+        <div class="progress-bar"><div class="progress-fill" id="pFill"></div></div>
+    </div>
+
+    <div class="screen" id="step4">
+        <h2 style="color:var(--moe-green)">انتهت العملية 🏁</h2>
+        <p>تم حفظ استجاباتك بنجاح.</p>
+        <button class="btn-moe" id="submitBtn" onclick="sendToSultan()">إرسال التقرير للأستاذ سلطان</button>
+        <div id="status-msg"></div>
     </div>
 </div>
 
 <script>
+    let name = "", current = 0, timer, sec = 10, score = 0, results = [];
+    const bgMusic = document.getElementById('bgMusic');
+
     const questions = [
-        { q: "ما هو اللون الأساسي لشعار وزارة التعليم الحالي؟", options: ["أزرق", "أخضر زيتوني", "أحمر"], correct: 1 },
-        { q: "كم تبلغ مدة رؤية المملكة العربية السعودية؟", options: ["2025", "2030", "2040"], correct: 1 },
-        { q: "المادة التي تدرس بنية الأرض تسمى؟", options: ["الفيزياء", "الجيولوجيا", "الكيمياء"], correct: 1 },
-        { q: "ما هي عاصمة المملكة العربية السعودية؟", options: ["جدة", "الدمام", "الرياض"], correct: 2 },
-        { q: "تعتبر القراءة وسيلة لـ...؟", options: ["تغذية العقل", "إضاعة الوقت", "النوم"], correct: 0 },
-        { q: "المواطنة الرقمية تهدف إلى الاستخدام الـ... للتقنية:", options: ["المفرط", "الآمن والمسؤول", "العشوائي"], correct: 1 },
-        { q: "أهم خطوة لحماية حساباتك هي استخدام كلمة مرور:", options: ["سهلة", "قوية ومتغيرة", "تاريخ ميلادك"], correct: 1 },
-        { q: "عند مشاهدة محتوى يسيء للوطن نقوم بـ:", options: ["تجاهله", "الإبلاغ عنه", "نشره"], correct: 1 }
+        { q: "رصدت انتحال شخصية معلمك يطلب بياناتك السرية..", opts: ["إرسال البيانات", "تجاهله وإبلاغ المدرسة", "الاستفسار منه"], c: 1 },
+        { q: "تطبيق خارجي يعدك بتغيير درجاتك مقابل رسوم..", opts: ["تجربة التطبيق", "الحذر والابتعاد", "مشاركته مع الزملاء"], c: 1 },
+        { q: "نشر صور لزميلك دون إذن منه يعتبر خرقاً لـ:", opts: ["الخصوصية والتنمر", "حرية الرأي", "التواصل الاجتماعي"], c: 0 },
+        { q: "وجدت محتوى يسيء للوطن، تصرفك الفوري هو:", opts: ["الرد بمسبات", "تجاهله", "الإبلاغ عبر 'كلنا أمن'"], c: 2 },
+        { q: "استخدام مقاطع الآخرين في بحثك يتطلب:", opts: ["نسبها لنفسك", "ذكر المصدر", "نشرها كما هي"], c: 1 },
+        { q: "وصلتك رسالة 'مبروك فزت بجائزة' تطلب رقم هويتك:", opts: ["أرسل الرقم", "أحذف الرسالة", "أتصل للتأكد"], c: 1 },
+        { q: "المواطنة الرقمية تعني الاستخدام الـ... للتقنية:", opts: ["المفرط", "المسؤول والآمن", "العشوائي"], c: 1 },
+        { q: "قضاء وقت طويل جداً خلف الشاشات يؤثر على:", opts: ["الصحة والتركيز", "سرعة الإنترنت", "لا يؤثر"], c: 0 },
+        { q: "كلمة المرور القوية يجب أن تحتوي على:", opts: ["اسمك فقط", "123456", "رموز وأرقام وحروف"], c: 2 },
+        { q: "عند مشاهدة تنمر إلكتروني ضد زميلك، يجب عليك:", opts: ["المشاركة فيه", "تجاهله تماماً", "مساندة الزميل وإبلاغ المعلم"], c: 2 }
     ];
 
-    let currentQuestionIndex = 0;
-    let score = 0;
-    let timer;
-    let timeLeft = 10;
+    document.getElementById('loginBtn').addEventListener('click', function() {
+        name = document.getElementById('stdName').value;
+        if(!name) return alert("سجل اسمك أولاً!");
+        bgMusic.play().catch(() => {});
+        document.getElementById('step1').classList.remove('active');
+        document.getElementById('step2').classList.add('active');
+        document.getElementById('msg').innerText = `يا بطل: ${name}، أنت في مهمة رسمية وعاجلة!`;
+    });
 
-    function startMission() {
-        const name = document.getElementById('userName').value;
-        if (!name) return alert("يرجى إدخال الاسم أولاً");
-        document.getElementById('setup').style.display = 'none';
-        document.getElementById('quiz').style.display = 'block';
-        document.getElementById('welcome-msg').innerText = `يا ${name}، هذه المهمة عاجلة ومهمة جداً!`;
-        loadQuestion();
-    }
+    document.getElementById('startBtn').addEventListener('click', function() {
+        document.getElementById('step2').classList.remove('active');
+        document.getElementById('step3').classList.add('active');
+        document.getElementById('timer-box').style.display = 'flex';
+        loadQ();
+    });
 
-    function loadQuestion() {
-        clearInterval(timer);
-        timeLeft = 10;
-        document.getElementById('timer').innerText = timeLeft;
-        const qData = questions[currentQuestionIndex];
-        let html = `<p><b>س${currentQuestionIndex + 1}:</b> ${qData.q}</p>`;
-        qData.options.forEach((opt, index) => {
-            html += `<label><input type="radio" name="answer" value="${index}"> ${opt}</label>`;
+    function loadQ() {
+        if(current >= questions.length) return end();
+        sec = 10;
+        document.getElementById('timer').innerText = sec;
+        document.getElementById('qText').innerText = questions[current].q;
+        const div = document.getElementById('options');
+        div.innerHTML = "";
+        questions[current].opts.forEach((o, i) => {
+            const b = document.createElement('button');
+            b.className = "option-btn";
+            b.innerText = o;
+            b.onclick = () => {
+                if(i === questions[current].c) score++;
+                results.push({q: questions[current].q, a: o});
+                current++;
+                loadQ();
+            };
+            div.appendChild(b);
         });
-        document.getElementById('question-container').innerHTML = html;
+        document.getElementById('pFill').style.width = (current/questions.length)*100 + "%";
+        clearInterval(timer);
         timer = setInterval(() => {
-            timeLeft--;
-            document.getElementById('timer').innerText = timeLeft;
-            if (timeLeft <= 0) { nextQuestion(); }
+            sec--;
+            document.getElementById('timer').innerText = sec;
+            if(sec <= 0) { 
+                results.push({q: questions[current].q, a: "انتهى الوقت"}); 
+                current++; 
+                loadQ(); 
+            }
         }, 1000);
     }
 
-    function nextQuestion() {
-        const selected = document.querySelector('input[name="answer"]:checked');
-        if (selected && parseInt(selected.value) === questions[currentQuestionIndex].correct) {
-            score++;
-        }
-        currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) {
-            loadQuestion();
-        } else {
-            showResult();
-        }
+    function end() {
+        clearInterval(timer);
+        bgMusic.pause();
+        document.getElementById('timer-box').style.display = 'none';
+        document.getElementById('step3').classList.remove('active');
+        document.getElementById('step4').classList.add('active');
     }
 
-    function showResult() {
-        clearInterval(timer);
-        document.getElementById('quiz').style.display = 'none';
-        document.getElementById('result-screen').style.display = 'block';
-        document.getElementById('final-score').innerText = `لقد أنجزت ${score} من أصل ${questions.length} أسئلة بنجاح.`;
+    async function sendToSultan() {
+        const btn = document.getElementById('submitBtn');
+        const status = document.getElementById('status-msg');
+        btn.disabled = true;
+        btn.innerText = "جاري الإرسال...";
+        const data = new FormData();
+        data.append("الطالب", name);
+        data.append("النتيجة", `${score} من ${questions.length}`);
+        fetch("https://formspree.io/f/xpqkqzbg", {
+            method: 'POST',
+            body: data,
+            headers: { 'Accept': 'application/json' }
+        }).then(() => {
+            status.innerHTML = "✅ تم الإرسال بنجاح! شكراً لك يا بطل.";
+            status.className = "success";
+            btn.innerText = "تم الإرسال";
+        }).catch(() => {
+            status.innerHTML = "❌ خطأ في الإرسال.";
+            btn.disabled = false;
+        });
     }
 </script>
 </body>
