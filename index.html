@@ -9,33 +9,33 @@
     <style>
         :root { --moe-green: #00816a; --alert-red: #e63946; --bg-color: #f4f7f6; }
         body { font-family: 'Cairo', sans-serif; background-color: var(--bg-color); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; touch-action: manipulation; }
-        
         .main-card { width: 90%; max-width: 500px; background: white; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 10px solid var(--moe-green); text-align: center; position: relative; }
-
-        /* زر الموسيقى الثابت في الزاوية */
+        
+        /* زر الموسيقى في الأعلى لسهولة الوصول */
         #music-ctrl {
-            position: absolute; bottom: 15px; left: 15px;
-            background: #eee; border: none; width: 40px; height: 40px;
-            border-radius: 50%; cursor: pointer; font-size: 18px;
-            display: flex; align-items: center; justify-content: center;
-            z-index: 100; transition: 0.3s;
+            position: absolute; top: 15px; right: 15px;
+            background: #f0f0f0; border: none; width: 35px; height: 35px;
+            border-radius: 50%; cursor: pointer; font-size: 16px;
+            z-index: 1000;
         }
 
         .timer-badge { 
             display: none; background: var(--alert-red); color: white; padding: 8px 15px; 
-            border-radius: 50px; font-weight: bold; font-size: 1.1rem; margin-bottom: 20px;
-            align-items: center; justify-content: center; gap: 8px; width: fit-content; margin: 0 auto 20px auto;
+            border-radius: 50px; font-weight: bold; font-size: 1.1rem; margin: 0 auto 20px auto;
+            align-items: center; justify-content: center; gap: 8px; width: fit-content;
         }
 
-        .screen { display: none; animation: fadeIn 0.4s; }
-        .screen.active { display: block; }
+        .screen { display: none; }
+        .screen.active { display: block; animation: fadeIn 0.4s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .btn-moe { background: var(--moe-green); color: white; border: none; padding: 15px; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
-        .option-btn { background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; margin: 8px 0; border-radius: 12px; cursor: pointer; text-align: right; width: 100%; font-family: 'Cairo'; }
+        .option-btn { background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; margin: 8px 0; border-radius: 12px; cursor: pointer; text-align: right; width: 100%; font-family: 'Cairo'; font-size: 1rem; }
         .progress-bar { height: 6px; background: #eee; border-radius: 4px; margin-top: 25px; overflow: hidden; }
         .progress-fill { height: 100%; width: 0%; background: var(--moe-green); transition: 0.3s; }
-        input[type="text"] { width: 100%; box-sizing: border-box; padding: 15px; margin-top: 15px; border-radius: 10px; border: 2px solid #eee; text-align: center; }
+        input[type="text"] { width: 100%; box-sizing: border-box; padding: 15px; margin-top: 15px; border-radius: 10px; border: 2px solid #eee; text-align: center; font-family: 'Cairo'; }
+        #status-msg { margin-top: 20px; font-weight: bold; padding: 10px; border-radius: 8px; font-size: 14px; }
+        .success { background: #d4edda; color: #155724; }
     </style>
 </head>
 <body>
@@ -48,6 +48,7 @@
     </div>
 
     <audio id="bgMusic" loop>
+        <source src="https://actions.google.com/sounds/v1/ambiences/industrial_low_hum.ogg" type="audio/ogg">
         <source src="https://www.soundjay.com/free-music/iron-man-heart-beat-1.mp3" type="audio/mpeg">
     </audio>
 
@@ -55,14 +56,14 @@
         <img src="https://upload.wikimedia.org/wikipedia/ar/1/11/Logo_of_Ministry_of_Education_%28Saudi_Arabia%29.svg" width="140">
         <h2>نظام الاستجابة الرقمي</h2>
         <input type="text" id="stdName" placeholder="سجل اسمك الثلاثي للبدء">
-        <button class="btn-moe" id="loginBtn">تفعيل الهوية والدخول</button>
+        <button class="btn-moe" onclick="startApp()">تفعيل الهوية والدخول</button>
     </div>
 
     <div class="screen" id="step2">
         <h2 style="color:var(--alert-red)">⚠️ نداء عاجل</h2>
         <p id="msg"></p>
         <p>البطولة تكمن في سرعة قراراتك.. هل أنت مستعد؟</p>
-        <button class="btn-moe" id="startBtn">قبول المهمة (ابدأ)</button>
+        <button class="btn-moe" onclick="startQuiz()">قبول المهمة (ابدأ)</button>
     </div>
 
     <div class="screen" id="step3">
@@ -74,24 +75,31 @@
     <div class="screen" id="step4">
         <h2 style="color:var(--moe-green)">انتهت العملية 🏁</h2>
         <p>تم حفظ استجاباتك بنجاح.</p>
-        <button class="btn-moe" id="submitBtn" onclick="sendToSultan()">إرسال التقرير للأستاذ سلطان</button>
+        <button class="btn-moe" id="submitBtn" onclick="sendReport()">إرسال التقرير للأستاذ سلطان</button>
         <div id="status-msg"></div>
     </div>
 </div>
 
 <script>
     let name = "", current = 0, timer, sec = 10, score = 0;
-    const bgMusic = document.getElementById('bgMusic');
-    const musicBtn = document.getElementById('music-ctrl');
+    const audio = document.getElementById('bgMusic');
+    const mBtn = document.getElementById('music-ctrl');
 
     function toggleMusic() {
-        if (bgMusic.paused) {
-            bgMusic.play();
-            musicBtn.innerText = "🔊";
-        } else {
-            bgMusic.pause();
-            musicBtn.innerText = "🔇";
-        }
+        if (audio.paused) { audio.play(); mBtn.innerText = "🔊"; } 
+        else { audio.pause(); mBtn.innerText = "🔇"; }
+    }
+
+    function startApp() {
+        name = document.getElementById('stdName').value;
+        if(!name) return alert("سجل اسمك أولاً!");
+        
+        // المحاولة الأهم لتشغيل الصوت عند أول نقرة للمستخدم
+        audio.play().catch(error => console.log("التحميل مطلوب أولاً"));
+        
+        document.getElementById('step1').classList.remove('active');
+        document.getElementById('step2').classList.add('active');
+        document.getElementById('msg').innerText = `يا بطل: ${name}، أنت في مهمة رسمية وعاجلة!`;
     }
 
     const questions = [
@@ -105,24 +113,12 @@
         { q: "قضاء 8 ساعات متواصلة على الألعاب الإلكترونية يؤثر على:", opts: ["الصحة الجسدية والعقلية", "المهارات التقنية فقط", "لا يؤثر على شيء"], c: 0 }
     ];
 
-    document.getElementById('loginBtn').addEventListener('click', function() {
-        name = document.getElementById('stdName').value;
-        if(!name) return alert("سجل اسمك أولاً!");
-        
-        // تشغيل الموسيقى فور التفاعل مع الزر
-        bgMusic.play().catch(e => console.log("تحتاج تفاعل يدوي"));
-        
-        document.getElementById('step1').classList.remove('active');
-        document.getElementById('step2').classList.add('active');
-        document.getElementById('msg').innerText = `يا بطل: ${name}، أنت في مهمة رسمية وعاجلة!`;
-    });
-
-    document.getElementById('startBtn').addEventListener('click', function() {
+    function startQuiz() {
         document.getElementById('step2').classList.remove('active');
         document.getElementById('step3').classList.add('active');
         document.getElementById('timer-box').style.display = 'flex';
         loadQ();
-    });
+    }
 
     function loadQ() {
         if(current >= questions.length) return end();
@@ -155,21 +151,20 @@
 
     function end() {
         clearInterval(timer);
-        bgMusic.pause();
+        audio.pause();
         document.getElementById('timer-box').style.display = 'none';
         document.getElementById('step3').classList.remove('active');
         document.getElementById('step4').classList.add('active');
     }
 
-    function sendToSultan() {
+    function sendReport() {
         const btn = document.getElementById('submitBtn');
         btn.disabled = true;
         btn.innerText = "جاري الإرسال...";
-        
-        // محاكاة إرسال (يمكن ربطها بـ Formspree كما في الكود السابق)
         setTimeout(() => {
-            document.getElementById('status-msg').innerHTML = "✅ تم الإرسال بنجاح!";
-            document.getElementById('status-msg').className = "success";
+            const status = document.getElementById('status-msg');
+            status.innerHTML = "✅ تم استلام تقريرك بنجاح يا بطل!";
+            status.className = "success";
             btn.innerText = "تم الإرسال";
         }, 1500);
     }
