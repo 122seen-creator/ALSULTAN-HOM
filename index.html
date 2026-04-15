@@ -3,22 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحدي المواطنة الرقمية - نسخة المعلم سلطان</title>
+    <title>تحدي المواطنة الرقمية - مهمة سرية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --moe-green: #00816a; --alert-red: #e63946; --bg-color: #f0f4f3; }
+        :root { --moe-green: #00816a; --alert-red: #e63946; --bg-color: #f4f7f6; }
         body { font-family: 'Cairo', sans-serif; background-color: var(--bg-color); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .main-card { width: 95%; max-width: 650px; background: white; border-radius: 20px; padding: 35px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 10px solid var(--moe-green); text-align: center; position: relative; }
-        .timer-badge { position: absolute; top: 15px; left: 15px; background: var(--alert-red); color: white; padding: 5px 15px; border-radius: 8px; font-weight: bold; display: none; z-index: 10; }
-        .screen { display: none; animation: fadeIn 0.5s; }
+        .main-card { width: 95%; max-width: 600px; background: white; border-radius: 20px; padding: 35px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 10px solid var(--moe-green); text-align: center; position: relative; }
+        .timer-badge { position: absolute; top: 15px; left: 15px; background: var(--alert-red); color: white; padding: 5px 15px; border-radius: 8px; font-weight: bold; display: none; }
+        .screen { display: none; animation: fadeIn 0.4s; }
         .screen.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .btn-moe { background: var(--moe-green); color: white; border: none; padding: 15px 30px; border-radius: 12px; font-size: 1.2rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; transition: 0.3s; }
-        .btn-moe:hover { background: #005f4e; }
-        .option-btn { background: #f8fafc; border: 1px solid #e2e8f0; padding: 18px; margin: 12px 0; border-radius: 12px; cursor: pointer; text-align: right; width: 100%; font-family: 'Cairo'; transition: 0.2s; font-size: 1.05rem; }
-        .option-btn:hover { border-color: var(--moe-green); background: #f0fdfa; transform: translateX(-5px); }
-        .progress-bar { height: 8px; background: #eee; border-radius: 4px; margin-top: 25px; overflow: hidden; }
-        .progress-fill { height: 100%; width: 0%; background: var(--moe-green); transition: 0.4s; }
+        .option-btn { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; margin: 10px 0; border-radius: 10px; cursor: pointer; text-align: right; width: 100%; font-family: 'Cairo'; font-size: 1rem; }
+        .option-btn:hover { border-color: var(--moe-green); background: #f0fdfa; }
+        .progress-bar { height: 8px; background: #eee; border-radius: 4px; margin-top: 20px; overflow: hidden; }
+        .progress-fill { height: 100%; width: 0%; background: var(--moe-green); transition: 0.3s; }
         #status-msg { margin-top: 20px; font-weight: bold; padding: 15px; border-radius: 10px; display: none; }
         .success { background: #d4edda; color: #155724; display: block !important; }
     </style>
@@ -28,148 +27,133 @@
 <div class="main-card">
     <div class="timer-badge" id="timer">15</div>
 
-    <audio id="bgMusic" loop>
-        <source src="https://www.soundjay.com/free-music/heart-beat-1.mp3" type="audio/mpeg">
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://www.soundjay.com/free-music/beats/heart-beat-1.mp3" type="audio/mpeg">
     </audio>
 
     <div class="screen active" id="step1">
-        <img src="https://upload.wikimedia.org/wikipedia/ar/1/11/Logo_of_Ministry_of_Education_%28Saudi_Arabia%29.svg" width="180">
-        <h2 style="color:var(--moe-green)">تحدي المهارات الرقمية</h2>
-        <input type="text" id="stdName" placeholder="أدخل اسمك الثلاثي" style="width:100%; padding:15px; margin-top:20px; border-radius:10px; border:1px solid #cbd5e1; text-align:center; font-family:'Cairo'; font-size:1.1rem;">
-        <button class="btn-moe" onclick="toStep2()">تسجيل الدخول للنظام</button>
+        <img src="https://upload.wikimedia.org/wikipedia/ar/1/11/Logo_of_Ministry_of_Education_%28Saudi_Arabia%29.svg" width="160">
+        <h2>نظام الاستجابة الرقمي</h2>
+        <input type="text" id="stdName" placeholder="سجل اسمك الثلاثي للبدء" style="width:100%; padding:15px; margin-top:15px; border-radius:10px; border:1px solid #ccc; text-align:center; font-family:'Cairo';">
+        <button class="btn-moe" onclick="toStep2()">تفعيل الهوية</button>
     </div>
 
     <div class="screen" id="step2">
-        <h2 style="color:var(--alert-red)">⚠️ نداء عاجل ومهم</h2>
-        <p id="msg" style="font-weight:bold; font-size:1.2rem;"></p>
-        <p>هناك اختراقات رقمية تستهدف خصوصية الطلاب. الوطن يحتاج لذكائك لاتخاذ القرارات الصحيحة حيال ذلك.</p>
-        <p><strong>هل تقبل المهمة؟</strong></p>
-        <button class="btn-moe" onclick="startSim()">قبول المهمة (ابدأ التحدي)</button>
+        <h2 style="color:var(--alert-red)">⚠️ نداء عاجل</h2>
+        <p id="msg"></p>
+        <p>البطولة تكمن في قراراتك.. هل أنت مستعد لحماية الفضاء الرقمي؟</p>
+        <button class="btn-moe" id="startBtn">قبول المهمة (ابدأ)</button>
     </div>
 
     <div class="screen" id="step3">
-        <h3 id="qText" style="min-height: 70px;"></h3>
+        <h3 id="qText"></h3>
         <div id="options"></div>
         <div class="progress-bar"><div class="progress-fill" id="pFill"></div></div>
     </div>
 
     <div class="screen" id="step4">
-        <h2 style="color:var(--moe-green)">اكتملت المهمة بنجاح 🏁</h2>
-        <p>تم تحليل استجاباتك الرقمية. اضغط الزر لإرسال النتيجة للأستاذ سلطان العقلاء.</p>
-        <form id="form-submission">
-            <button class="btn-moe" type="submit" id="submitBtn">إرسال الدرجة الآن</button>
-        </form>
+        <h2 style="color:var(--moe-green)">انتهت العملية 🏁</h2>
+        <p>تم حفظ استجاباتك. اضغط الزر أدناه لإرسال الملف المشفر للأستاذ سلطان.</p>
+        <button class="btn-moe" id="submitBtn" onclick="sendToSultan()">إرسال التقرير الآن</button>
         <div id="status-msg"></div>
     </div>
 </div>
 
 <script>
-    let name = "", current = 0, timer, sec = 15, score = 0;
-    let quizResults = [];
+    let name = "", current = 0, timer, sec = 15, score = 0, results = [];
+    const bgMusic = document.getElementById('bgMusic');
 
     const questions = [
-        { q: "رصدت انتحال شخصية معلمك في تلجرام يطلب بياناتك..", opts: ["إرسال البيانات فوراً", "تجاهله وإبلاغ المدرسة", "الاستفسار منه عن السبب"], correct: 1 },
-        { q: "وصلك تطبيق يعد بتغيير درجاتك مقابل رسوم..", opts: ["تجربة التطبيق", "الحذر منه والابتعاد", "مشاركته مع الزملاء"], correct: 1 },
-        { q: "نشر صور لزميلك دون إذن منه يعتبر خرقاً لـ:", opts: ["الخصوصية والتنمر", "حرية الرأي", "التواصل الاجتماعي"], correct: 0 },
-        { q: "وجدت محتوى يسيء للوطن، تصرفك هو:", opts: ["الرد بمسبات", "تجاهله تماماً", "الإبلاغ عبر 'كلنا أمن'"], correct: 2 },
-        { q: "استخدام مقاطع الآخرين في بحثك يتطلب:", opts: ["نسبها لنفسك", "ذكر المصدر واحترام الملكية", "نشرها كما هي دون تعديل"], correct: 1 }
+        { q: "رصدت انتحال شخصية معلمك يطلب بياناتك السرية..", opts: ["إرسال البيانات", "تجاهله وإبلاغ المدرسة", "الاستفسار منه"], c: 1 },
+        { q: "تطبيق خارجي يعدك بتغيير درجاتك مقابل رسوم..", opts: ["تجربة التطبيق", "الحذر والابتعاد", "مشاركته مع الزملاء"], c: 1 },
+        { q: "نشر صور لزميلك دون إذن منه يعتبر خرقاً لـ:", opts: ["الخصوصية والتنمر", "حرية الرأي", "التواصل الاجتماعي"], c: 0 },
+        { q: "وجدت محتوى يسيء للوطن، تصرفك الفوري هو:", opts: ["الرد بمسبات", "تجاهله", "الإبلاغ عبر 'كلنا أمن'"], c: 2 },
+        { q: "استخدام مقاطع الآخرين في بحثك يتطلب:", opts: ["نسبها لنفسك", "ذكر المصدر", "نشرها كما هي"], c: 1 }
     ];
 
     function toStep2() {
         name = document.getElementById('stdName').value;
-        if(!name) return alert("الرجاء كتابة اسمك!");
+        if(!name) return alert("سجل اسمك أولاً!");
         document.getElementById('step1').classList.remove('active');
         document.getElementById('step2').classList.add('active');
         document.getElementById('msg').innerText = `يا بطل: ${name}، أنت في مهمة رسمية!`;
     }
 
-    function startSim() {
-        // تشغيل الموسيقى
-        const audio = document.getElementById('bgMusic');
-        audio.volume = 0.4;
-        audio.play().catch(() => console.log("Audio waiting for interaction"));
-        
+    // تشغيل الموسيقى عند الضغط على زر "قبول المهمة"
+    document.getElementById('startBtn').addEventListener('click', function() {
+        bgMusic.play().catch(e => console.log("الصوت محظور"));
         document.getElementById('step2').classList.remove('active');
         document.getElementById('step3').classList.add('active');
         document.getElementById('timer').style.display = 'block';
         loadQ();
-    }
+    });
 
     function loadQ() {
-        if(current >= questions.length) return endSimulation();
+        if(current >= questions.length) return end();
         sec = 15;
         document.getElementById('timer').innerText = sec;
         document.getElementById('qText').innerText = questions[current].q;
         const div = document.getElementById('options');
         div.innerHTML = "";
         
-        questions[current].opts.forEach((o, index) => {
+        questions[current].opts.forEach((o, i) => {
             const b = document.createElement('button');
             b.className = "option-btn";
             b.innerText = o;
             b.onclick = () => {
-                if(index === questions[current].correct) score++;
-                quizResults.push({q: questions[current].q, a: o});
+                if(i === questions[current].c) score++;
+                results.push({q: questions[current].q, a: o});
                 current++;
                 loadQ();
             };
             div.appendChild(b);
         });
 
-        document.getElementById('pFill').style.width = (current / questions.length) * 100 + "%";
-        
+        document.getElementById('pFill').style.width = (current/questions.length)*100 + "%";
         clearInterval(timer);
         timer = setInterval(() => {
-            sec--; 
+            sec--;
             document.getElementById('timer').innerText = sec;
-            if(sec <= 0) {
-                quizResults.push({q: questions[current].q, a: "انتهى الوقت"});
-                current++;
-                loadQ();
-            }
+            if(sec<=0) { results.push({q: questions[current].q, a: "انتهى الوقت"}); current++; loadQ(); }
         }, 1000);
     }
 
-    function endSimulation() {
+    function end() {
         clearInterval(timer);
+        bgMusic.pause();
         document.getElementById('timer').style.display = 'none';
         document.getElementById('step3').classList.remove('active');
         document.getElementById('step4').classList.add('active');
     }
 
-    // الإرسال الصامت لـ Formspree
-    document.getElementById("form-submission").addEventListener("submit", async function(e) {
-        e.preventDefault();
-        const btn = document.getElementById("submitBtn");
-        const status = document.getElementById("status-msg");
-        
+    async function sendToSultan() {
+        const btn = document.getElementById('submitBtn');
+        const status = document.getElementById('status-msg');
         btn.disabled = true;
-        btn.innerText = "جاري رفع النتائج...";
+        btn.innerText = "جاري إرسال التقرير...";
 
-        const formData = new FormData();
-        formData.append("اسم الطالب", name);
-        formData.append("الدرجة النهائية", `${score} من ${questions.length}`);
-        quizResults.forEach((r, i) => {
-            formData.append(`سؤال ${i+1}`, `${r.q} -> إجابة الطالب: ${r.a}`);
-        });
+        const data = new FormData();
+        data.append("البطل", name);
+        data.append("النتيجة النهائية", `${score} من ${questions.length}`);
+        results.forEach((r, i) => data.append(`مهمة ${i+1}`, `${r.q} -> القرار: ${r.a}`));
 
-        // استبدل ID_HERE برمز Formspree الخاص بك
+        // استبدل your_id برمز Formspree الخاص بك
         fetch("https://formspree.io/f/xpqkqzbg", {
             method: 'POST',
-            body: formData,
+            body: data,
             headers: { 'Accept': 'application/json' }
         }).then(res => {
             if (res.ok) {
-                status.innerHTML = "✅ تم الإرسال بنجاح! نتيجتك هي: " + score + " من " + questions.length;
+                status.innerHTML = "✅ تم استلام تقريرك بنجاح يا بطل! سيتم مراجعة قراراتك من قبل القائد سلطان.";
                 status.className = "success";
                 btn.innerText = "تم الإرسال";
             } else { throw new Error(); }
         }).catch(() => {
-            status.innerHTML = "❌ خطأ في الإرسال. صور الشاشة وأرسلها للأستاذ.";
+            status.innerText = "❌ حدث خطأ. صور الشاشة وأرسلها للأستاذ.";
             status.style.display = "block";
             btn.disabled = false;
         });
-    });
+    }
 </script>
 </body>
 </html>
