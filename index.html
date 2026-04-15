@@ -2,119 +2,187 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>تحدي المواطنة الرقمية - المهمة الكبرى</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --moe-green: #00816a; --alert-red: #e63946; --bg-color: #f4f7f6; }
-        body { font-family: 'Cairo', sans-serif; background-color: var(--bg-color); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; touch-action: manipulation; }
-        .main-card { width: 95%; max-width: 600px; background: white; border-radius: 20px; padding: 35px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 10px solid var(--moe-green); text-align: center; position: relative; }
-        .timer-badge { position: absolute; top: 15px; left: 15px; background: var(--alert-red); color: white; padding: 5px 15px; border-radius: 8px; font-weight: bold; display: none; }
+        
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background-color: var(--bg-color); 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            touch-action: manipulation;
+            overflow-x: hidden;
+        }
+
+        .main-card { 
+            width: 90%; 
+            max-width: 500px; 
+            background: white; 
+            border-radius: 20px; 
+            padding: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            border-top: 10px solid var(--moe-green); 
+            text-align: center; 
+            position: relative;
+            margin: 20px auto;
+        }
+
+        /* تنسيق العداد مع أيقونة الساعة */
+        .timer-badge { 
+            display: none;
+            background: var(--alert-red); 
+            color: white; 
+            padding: 8px 15px; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
         .screen { display: none; animation: fadeIn 0.4s; }
         .screen.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .btn-moe { background: var(--moe-green); color: white; border: none; padding: 15px 30px; border-radius: 12px; font-size: 1.2rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,129,106,0.2); }
-        .option-btn { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; margin: 10px 0; border-radius: 10px; cursor: pointer; text-align: right; width: 100%; font-family: 'Cairo'; font-size: 1rem; }
-        .option-btn:hover { border-color: var(--moe-green); background: #f0fdfa; }
-        .progress-bar { height: 8px; background: #eee; border-radius: 4px; margin-top: 20px; overflow: hidden; }
+
+        .btn-moe { 
+            background: var(--moe-green); 
+            color: white; 
+            border: none; 
+            padding: 15px; 
+            border-radius: 12px; 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            width: 100%; 
+            margin-top: 20px; 
+            transition: 0.3s; 
+        }
+
+        .option-btn { 
+            background: #f8fafc; 
+            border: 1px solid #e2e8f0; 
+            padding: 14px; 
+            margin: 8px 0; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            text-align: right; 
+            width: 100%; 
+            font-family: 'Cairo'; 
+            font-size: 0.95rem;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .option-btn:active { background: #f0fdfa; transform: scale(0.98); }
+
+        .progress-bar { height: 6px; background: #eee; border-radius: 4px; margin-top: 25px; overflow: hidden; }
         .progress-fill { height: 100%; width: 0%; background: var(--moe-green); transition: 0.3s; }
-        #status-msg { margin-top: 20px; font-weight: bold; padding: 15px; border-radius: 10px; display: none; }
-        .success { background: #d4edda; color: #155724; display: block !important; }
         
-        /* إضافة زر كتم الصوت لزيادة التحكم */
-        #mute-btn { position: absolute; bottom: 10px; left: 10px; background: none; border: none; cursor: pointer; font-size: 20px; opacity: 0.5; }
+        #status-msg { margin-top: 20px; font-weight: bold; padding: 15px; border-radius: 10px; font-size: 14px; }
+        .success { background: #d4edda; color: #155724; }
+
+        input[type="text"] {
+            width: 100%; box-sizing: border-box; padding: 15px; margin-top: 15px; 
+            border-radius: 10px; border: 2px solid #eee; text-align: center; font-size: 1rem;
+        }
+
+        /* تحسينات إضافية للهواتف الصغيرة */
+        @media (max-width: 380px) {
+            .main-card { padding: 15px; }
+            h2 { font-size: 1.2rem; }
+        }
     </style>
 </head>
 <body>
 
 <div class="main-card">
-    <div class="timer-badge" id="timer">15</div>
-    <button id="mute-btn" onclick="toggleMute()">🔊</button>
+    <div class="timer-badge" id="timer-box">
+        <i class="fas fa-clock"></i>
+        <span id="timer">10</span>
+    </div>
 
     <audio id="bgMusic" loop preload="auto">
-        <source src="tension.mp3" type="audio/mpeg">
         <source src="https://www.soundjay.com/free-music/iron-man-heart-beat-1.mp3" type="audio/mpeg">
     </audio>
 
     <div class="screen active" id="step1">
-        <img src="https://upload.wikimedia.org/wikipedia/ar/1/11/Logo_of_Ministry_of_Education_%28Saudi_Arabia%29.svg" width="160">
+        <img src="https://upload.wikimedia.org/wikipedia/ar/1/11/Logo_of_Ministry_of_Education_%28Saudi_Arabia%29.svg" width="140">
         <h2>نظام الاستجابة الرقمي</h2>
-        <input type="text" id="stdName" placeholder="سجل اسمك الثلاثي للبدء" style="width:100%; padding:15px; margin-top:15px; border-radius:10px; border:1px solid #ccc; text-align:center; font-family:'Cairo';">
+        <input type="text" id="stdName" placeholder="سجل اسمك هنا للبدء">
         <button class="btn-moe" id="loginBtn">تفعيل الهوية والدخول</button>
-        <p style="font-size: 12px; color: #888; margin-top: 10px;">(يُفضل تفعيل الصوت لتجربة أكثر حماساً)</p>
     </div>
 
     <div class="screen" id="step2">
         <h2 style="color:var(--alert-red)">⚠️ نداء عاجل</h2>
         <p id="msg"></p>
-        <p>البطولة تكمن في قراراتك.. هل أنت مستعد لحماية الفضاء الرقمي؟</p>
+        <p>البطولة تكمن في سرعة قراراتك.. هل أنت مستعد؟</p>
         <button class="btn-moe" id="startBtn">قبول المهمة (ابدأ)</button>
     </div>
 
     <div class="screen" id="step3">
-        <h3 id="qText"></h3>
+        <h3 id="qText" style="min-height: 60px;"></h3>
         <div id="options"></div>
         <div class="progress-bar"><div class="progress-fill" id="pFill"></div></div>
     </div>
 
     <div class="screen" id="step4">
         <h2 style="color:var(--moe-green)">انتهت العملية 🏁</h2>
-        <p>تم حفظ استجاباتك. اضغط الزر أدناه لإرسال الملف المشفر للأستاذ سلطان.</p>
-        <button class="btn-moe" id="submitBtn" onclick="sendToSultan()">إرسال التقرير الآن</button>
+        <p>تم حفظ استجاباتك بنجاح.</p>
+        <button class="btn-moe" id="submitBtn" onclick="sendToSultan()">إرسال التقرير للأستاذ سلطان</button>
         <div id="status-msg"></div>
     </div>
 </div>
 
 <script>
-    let name = "", current = 0, timer, sec = 15, score = 0, results = [];
+    let name = "", current = 0, timer, sec = 10, score = 0, results = [];
     const bgMusic = document.getElementById('bgMusic');
 
-    // وظيفة تشغيل الصوت المحسنة
-    function playAudio() {
-        bgMusic.play().then(() => {
-            console.log("الموسيقى تعمل بنجاح");
-        }).catch(error => {
-            console.log("فشل التشغيل التلقائي، سيتم المحاولة مع الخطوة التالية");
-        });
-    }
-
-    function toggleMute() {
-        bgMusic.muted = !bgMusic.muted;
-        document.getElementById('mute-btn').innerText = bgMusic.muted ? "🔇" : "🔊";
-    }
-
+    // قائمة الأسئلة (تمت زيادة العدد)
     const questions = [
         { q: "رصدت انتحال شخصية معلمك يطلب بياناتك السرية..", opts: ["إرسال البيانات", "تجاهله وإبلاغ المدرسة", "الاستفسار منه"], c: 1 },
         { q: "تطبيق خارجي يعدك بتغيير درجاتك مقابل رسوم..", opts: ["تجربة التطبيق", "الحذر والابتعاد", "مشاركته مع الزملاء"], c: 1 },
         { q: "نشر صور لزميلك دون إذن منه يعتبر خرقاً لـ:", opts: ["الخصوصية والتنمر", "حرية الرأي", "التواصل الاجتماعي"], c: 0 },
         { q: "وجدت محتوى يسيء للوطن، تصرفك الفوري هو:", opts: ["الرد بمسبات", "تجاهله", "الإبلاغ عبر 'كلنا أمن'"], c: 2 },
-        { q: "استخدام مقاطع الآخرين في بحثك يتطلب:", opts: ["نسبها لنفسك", "ذكر المصدر", "نشرها كما هي"], c: 1 }
+        { q: "استخدام مقاطع الآخرين في بحثك يتطلب:", opts: ["نسبها لنفسك", "ذكر المصدر", "نشرها كما هي"], c: 1 },
+        { q: "وصلتك رسالة 'مبروك فزت بجائزة' تطلب رقم هويتك:", opts: ["أرسل الرقم فوراً", "أحذف الرسالة فوراً", "أتصل بهم للتأكد"], c: 1 },
+        { q: "كلمة المرور القوية يجب أن تحتوي على:", opts: ["اسمك وتاريخ ميلادك", "123456", "رموز وأرقام وحروف متنوعة"], c: 2 },
+        { q: "قضاء 8 ساعات متواصلة على الألعاب الإلكترونية يؤثر على:", opts: ["الصحة الجسدية والعقلية", "المهارات التقنية فقط", "لا يؤثر على شيء"], c: 0 }
     ];
 
     document.getElementById('loginBtn').addEventListener('click', function() {
         name = document.getElementById('stdName').value;
         if(!name) return alert("سجل اسمك أولاً!");
-        
-        playAudio(); // محاولة التشغيل عند أول نقرة
-        
+        bgMusic.play().catch(() => {});
         document.getElementById('step1').classList.remove('active');
         document.getElementById('step2').classList.add('active');
-        document.getElementById('msg').innerText = `يا بطل: ${name}، أنت في مهمة رسمية!`;
+        document.getElementById('msg').innerText = `يا بطل: ${name}، أنت في مهمة رسمية وعاجلة!`;
     });
 
     document.getElementById('startBtn').addEventListener('click', function() {
-        playAudio(); // إعادة محاولة التشغيل للتأكيد
         document.getElementById('step2').classList.remove('active');
         document.getElementById('step3').classList.add('active');
-        document.getElementById('timer').style.display = 'block';
+        document.getElementById('timer-box').style.display = 'flex';
         loadQ();
     });
 
     function loadQ() {
         if(current >= questions.length) return end();
-        sec = 15;
+        
+        sec = 10; // تقليل الوقت لـ 10 ثوانٍ
         document.getElementById('timer').innerText = sec;
         document.getElementById('qText').innerText = questions[current].q;
+        
         const div = document.getElementById('options');
         div.innerHTML = "";
         
@@ -132,18 +200,23 @@
         });
 
         document.getElementById('pFill').style.width = (current/questions.length)*100 + "%";
+        
         clearInterval(timer);
         timer = setInterval(() => {
             sec--;
             document.getElementById('timer').innerText = sec;
-            if(sec<=0) { results.push({q: questions[current].q, a: "انتهى الوقت"}); current++; loadQ(); }
+            if(sec <= 0) { 
+                results.push({q: questions[current].q, a: "انتهى الوقت"}); 
+                current++; 
+                loadQ(); 
+            }
         }, 1000);
     }
 
     function end() {
         clearInterval(timer);
         bgMusic.pause();
-        document.getElementById('timer').style.display = 'none';
+        document.getElementById('timer-box').style.display = 'none';
         document.getElementById('step3').classList.remove('active');
         document.getElementById('step4').classList.add('active');
     }
@@ -152,26 +225,22 @@
         const btn = document.getElementById('submitBtn');
         const status = document.getElementById('status-msg');
         btn.disabled = true;
-        btn.innerText = "جاري إرسال التقرير...";
+        btn.innerText = "جاري الإرسال...";
 
         const data = new FormData();
-        data.append("البطل", name);
-        data.append("النتيجة النهائية", `${score} من ${questions.length}`);
-        results.forEach((r, i) => data.append(`مهمة ${i+1}`, `${r.q} -> القرار: ${r.a}`));
+        data.append("الطالب", name);
+        data.append("النتيجة", `${score} من ${questions.length}`);
 
         fetch("https://formspree.io/f/xpqkqzbg", {
             method: 'POST',
             body: data,
             headers: { 'Accept': 'application/json' }
-        }).then(res => {
-            if (res.ok) {
-                status.innerHTML = "✅ تم استلام تقريرك بنجاح يا بطل! سيتم مراجعة قراراتك من قبل القائد سلطان.";
-                status.className = "success";
-                btn.innerText = "تم الإرسال";
-            } else { throw new Error(); }
+        }).then(() => {
+            status.innerHTML = "✅ تم الإرسال بنجاح! شكراً لك يا بطل.";
+            status.className = "success";
+            btn.innerText = "تم الإرسال";
         }).catch(() => {
-            status.innerHTML = "❌ حدث خطأ. صور الشاشة وأرسلها للأستاذ.";
-            status.style.display = "block";
+            status.innerHTML = "❌ خطأ في الإرسال، يرجى تصوير الشاشة.";
             btn.disabled = false;
         });
     }
