@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحدي المواطنة الرقمية - مهمة سرية</title>
+    <title>تحدي المواطنة الرقمية - المهمة الكبرى</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --moe-green: #00816a; --alert-red: #e63946; --bg-color: #f4f7f6; }
-        body { font-family: 'Cairo', sans-serif; background-color: var(--bg-color); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        body { font-family: 'Cairo', sans-serif; background-color: var(--bg-color); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; touch-action: manipulation; }
         .main-card { width: 95%; max-width: 600px; background: white; border-radius: 20px; padding: 35px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 10px solid var(--moe-green); text-align: center; position: relative; }
         .timer-badge { position: absolute; top: 15px; left: 15px; background: var(--alert-red); color: white; padding: 5px 15px; border-radius: 8px; font-weight: bold; display: none; }
         .screen { display: none; animation: fadeIn 0.4s; }
         .screen.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .btn-moe { background: var(--moe-green); color: white; border: none; padding: 15px 30px; border-radius: 12px; font-size: 1.2rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; transition: 0.3s; }
+        .btn-moe { background: var(--moe-green); color: white; border: none; padding: 15px 30px; border-radius: 12px; font-size: 1.2rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,129,106,0.2); }
         .option-btn { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; margin: 10px 0; border-radius: 10px; cursor: pointer; text-align: right; width: 100%; font-family: 'Cairo'; font-size: 1rem; }
         .option-btn:hover { border-color: var(--moe-green); background: #f0fdfa; }
         .progress-bar { height: 8px; background: #eee; border-radius: 4px; margin-top: 20px; overflow: hidden; }
@@ -28,14 +28,14 @@
     <div class="timer-badge" id="timer">15</div>
 
     <audio id="bgMusic" loop preload="auto">
-        <source src="https://www.soundjay.com/free-music/beats/heart-beat-1.mp3" type="audio/mpeg">
+        <source src="tension.mp3" type="audio/mpeg">
     </audio>
 
     <div class="screen active" id="step1">
         <img src="https://upload.wikimedia.org/wikipedia/ar/1/11/Logo_of_Ministry_of_Education_%28Saudi_Arabia%29.svg" width="160">
         <h2>نظام الاستجابة الرقمي</h2>
         <input type="text" id="stdName" placeholder="سجل اسمك الثلاثي للبدء" style="width:100%; padding:15px; margin-top:15px; border-radius:10px; border:1px solid #ccc; text-align:center; font-family:'Cairo';">
-        <button class="btn-moe" onclick="toStep2()">تفعيل الهوية</button>
+        <button class="btn-moe" id="loginBtn">تفعيل الهوية والدخول</button>
     </div>
 
     <div class="screen" id="step2">
@@ -63,6 +63,15 @@
     let name = "", current = 0, timer, sec = 15, score = 0, results = [];
     const bgMusic = document.getElementById('bgMusic');
 
+    // وظيفة تشغيل الصوت - الحل البرمجي الأقوى
+    function playAudio() {
+        bgMusic.play().then(() => {
+            console.log("Audio playing...");
+        }).catch(e => {
+            console.log("Audio waiting for more interaction");
+        });
+    }
+
     const questions = [
         { q: "رصدت انتحال شخصية معلمك يطلب بياناتك السرية..", opts: ["إرسال البيانات", "تجاهله وإبلاغ المدرسة", "الاستفسار منه"], c: 1 },
         { q: "تطبيق خارجي يعدك بتغيير درجاتك مقابل رسوم..", opts: ["تجربة التطبيق", "الحذر والابتعاد", "مشاركته مع الزملاء"], c: 1 },
@@ -71,17 +80,21 @@
         { q: "استخدام مقاطع الآخرين في بحثك يتطلب:", opts: ["نسبها لنفسك", "ذكر المصدر", "نشرها كما هي"], c: 1 }
     ];
 
-    function toStep2() {
+    // تشغيل الصوت عند أول تفاعل (زر الدخول)
+    document.getElementById('loginBtn').addEventListener('click', function() {
         name = document.getElementById('stdName').value;
         if(!name) return alert("سجل اسمك أولاً!");
+        
+        playAudio(); // محاولة تشغيل الصوت مبكراً
+        
         document.getElementById('step1').classList.remove('active');
         document.getElementById('step2').classList.add('active');
         document.getElementById('msg').innerText = `يا بطل: ${name}، أنت في مهمة رسمية!`;
-    }
+    });
 
-    // تشغيل الموسيقى عند الضغط على زر "قبول المهمة"
+    // تشغيل الصوت مرة أخرى للتأكيد عند زر البدء
     document.getElementById('startBtn').addEventListener('click', function() {
-        bgMusic.play().catch(e => console.log("الصوت محظور"));
+        playAudio();
         document.getElementById('step2').classList.remove('active');
         document.getElementById('step3').classList.add('active');
         document.getElementById('timer').style.display = 'block';
@@ -137,7 +150,6 @@
         data.append("النتيجة النهائية", `${score} من ${questions.length}`);
         results.forEach((r, i) => data.append(`مهمة ${i+1}`, `${r.q} -> القرار: ${r.a}`));
 
-        // استبدل your_id برمز Formspree الخاص بك
         fetch("https://formspree.io/f/xpqkqzbg", {
             method: 'POST',
             body: data,
@@ -149,7 +161,7 @@
                 btn.innerText = "تم الإرسال";
             } else { throw new Error(); }
         }).catch(() => {
-            status.innerText = "❌ حدث خطأ. صور الشاشة وأرسلها للأستاذ.";
+            status.innerHTML = "❌ حدث خطأ. صور الشاشة وأرسلها للأستاذ.";
             status.style.display = "block";
             btn.disabled = false;
         });
