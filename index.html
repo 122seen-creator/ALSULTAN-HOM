@@ -124,15 +124,15 @@
 
     <div class="screen active" id="step1">
         <img src="https://upload.wikimedia.org/wikipedia/ar/1/11/Logo_of_Ministry_of_Education_%28Saudi_Arabia%29.svg" width="140">
-        <h2>نظام الاستجابة الرقمي</h2>
+        <h2>مـــهمة عاجـــلة</h2>
         <input type="text" id="stdName" placeholder="سجل اسمك الثلاثي للبدء">
-        <button class="btn-moe" id="loginBtn">تفعيل الهوية والدخول</button>
+        <button class="btn-moe" id="loginBtn">تفعيل الدخول</button>
     </div>
 
     <div class="screen" id="step2">
         <h2 style="color:var(--alert-red)">⚠️ نداء عاجل</h2>
         <p id="msg"></p>
-        <p>البطولة تكمن في سرعة قراراتك.. هل أنت مستعد لحماية الفضاء الرقمي؟</p>
+        <p>البطولة تكمن في سرعة قراراتك.. هل أنت مستعد لحماية بيانات مدرستنا؟</p>
         <button class="btn-moe" id="startBtn">قبول المهمة (ابدأ)</button>
     </div>
 
@@ -144,7 +144,7 @@
 
     <div class="screen" id="step4">
         <h2 style="color:var(--moe-green)">انتهت العملية 🏁</h2>
-        <p>تم حفظ استجاباتك. اضغط الزر أدناه لإرسال الملف المشفر للأستاذ سلطان.</p>
+        <p>تم حفظ استجاباتك. اضغط الزر أدناه لإرسال الملف للأستاذ سلطان.</p>
         <button class="btn-moe" id="submitBtn" onclick="sendToSultan()">إرسال التقرير الآن</button>
         <div id="status-msg"></div>
     </div>
@@ -245,7 +245,7 @@
             headers: { 'Accept': 'application/json' }
         }).then(res => {
             if (res.ok) {
-                status.innerHTML = "✅ تم استلام تقريرك بنجاح يا بطل! سيتم مراجعة قراراتك من قبل القائد سلطان.";
+                status.innerHTML = "✅ تم استلام تقريرك بنجاح يا بطل! سيتم مراجعة قراراتك مع سلطان.";
                 status.className = "success";
                 btn.innerText = "تم الإرسال";
             } else { throw new Error(); }
