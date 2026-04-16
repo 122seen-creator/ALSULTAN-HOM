@@ -35,7 +35,6 @@
             box-sizing: border-box;
         }
 
-        /* تنسيق العداد مع أيقونة الساعة بالقرب منه */
         .timer-badge { 
             display: none;
             background: var(--alert-red); 
@@ -119,11 +118,9 @@
 
    <audio id="bgMusic" loop preload="auto">
     <source src="tension.mp3" type="audio/mpeg">
-
     </audio>
 
     <div class="screen active" id="step1">
-        <img src="https://upload.wikimedia.org/wikipedia/ar/1/11/Logo_of_Ministry_of_Education_%28Saudi_Arabia%29.svg" width="140">
         <h2>مـــهمة عاجـــلة</h2>
         <input type="text" id="stdName" placeholder="سجل اسمك الثلاثي للبدء">
         <button class="btn-moe" id="loginBtn">تفعيل الدخول</button>
@@ -163,7 +160,6 @@
         document.getElementById('mute-btn').innerText = bgMusic.muted ? "🔇" : "🔊";
     }
 
-    // زيادة عدد الأسئلة لتشمل مفاهيم أعمق للمواطنة الرقمية
     const questions = [
         { q: "رصدت انتحال شخصية معلمك يطلب بياناتك السرية..", opts: ["إرسال البيانات", "تجاهله وإبلاغ المدرسة", "الاستفسار منه"], c: 1 },
         { q: "تطبيق خارجي يعدك بتغيير درجاتك مقابل رسوم..", opts: ["تجربة التطبيق", "الحذر والابتعاد", "مشاركته مع الزملاء"], c: 1 },
@@ -245,7 +241,7 @@
             headers: { 'Accept': 'application/json' }
         }).then(res => {
             if (res.ok) {
-                status.innerHTML = "✅ تم استلام تقريرك بنجاح يا بطل! سيتم مراجعة قراراتك مع سلطان.";
+                status.innerHTML = "✅ تم استلام تقريرك بنجاح يا بطل! سيتم مراجعة قراراتك مع أ.سلطان.";
                 status.className = "success";
                 btn.innerText = "تم الإرسال";
             } else { throw new Error(); }
